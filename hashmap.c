@@ -7,8 +7,7 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
 	return NULL;
 }
 
-void hash_map_put_entry_move(struct hash_map* map, void* k, void* v, 
-	size_t sz) {
+void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
 	
 }
 
