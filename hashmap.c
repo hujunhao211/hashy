@@ -3,7 +3,6 @@
 
 struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     void (*key_destruct)(void*), void (*value_destruct)(void*)) {
-	
 	return NULL;
 }
 
