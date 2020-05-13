@@ -123,6 +123,9 @@ size_t compression(hashmap_t* map,size_t hash_id){
 
 struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     void (*key_destruct)(void*), void (*value_destruct)(void*)) {
+    if (hash == NULL || cmp == NULL || key_destruct == NULL || value_destruct == NULL){
+        return NULL;
+    }
     hashmap_t *hashmap = malloc(sizeof(hashmap_t));
     hashmap->buckets = malloc(sizeof(linked_list_t*) * 50);
     hashmap->size = 0;
