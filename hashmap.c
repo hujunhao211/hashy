@@ -164,6 +164,7 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     linked_list_t* list = map->buckets[index];
     package_t* p = find(map, list->head, k);
     if (p->cur == NULL) {
+        free(p);
         return NULL;
     }
     void* value = p->cur->d->value;
