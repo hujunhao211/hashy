@@ -129,7 +129,7 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     if (hash == NULL || cmp == NULL || key_destruct == NULL || value_destruct == NULL){
         return NULL;
     }
-    hashmap_t *hashmap = malloc(sizeof(hashmap_t));
+    hashmap_t *hashmap = malloc(sizeof(struct hash_map));
     hashmap->buckets = malloc(sizeof(linked_list_t*) * 50);
     hashmap->size = 0;
     hashmap->capacity = 50;
@@ -144,35 +144,36 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
 }
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
-    size_t index = map->hash(k);
-    index = compression(map, index);
-    if (map->buckets[index] == NULL){
-        map->buckets[index] = list_initialize();
-        map->size++;
-    }
-    linked_list_insert(map, map->buckets[index], k, v);
+//    size_t index = map->hash(k);
+//    index = compression(map, index);
+//    if (map->buckets[index] == NULL){
+//        map->buckets[index] = list_initialize();
+//        map->size++;
+//    }
+//    linked_list_insert(map, map->buckets[index], k, v);
 }
 
 void hash_map_remove_entry(struct hash_map* map, void* k) {
-    size_t index = map->hash(k);
-    index = compression(map, index);
-    linked_list_t* list = map->buckets[index];
-    if (list != NULL)
-        linked_list_remove(map, list, k);
+//    size_t index = map->hash(k);
+//    index = compression(map, index);
+//    linked_list_t* list = map->buckets[index];
+//    if (list != NULL)
+//        linked_list_remove(map, list, k);
 }
 
 void* hash_map_get_value_ref(struct hash_map* map, void* k) {
-    size_t index = map->hash(k);
-    index = compression(map, index);
-    linked_list_t* list = map->buckets[index];
-    package_t* p = find(map, list->head, k);
-    if (p->cur == NULL) {
-        free(p);
-        return NULL;
-    }
-    void* value = p->cur->d->value;
-    free(p);
-    return value;
+//    size_t index = map->hash(k);
+//    index = compression(map, index);
+//    linked_list_t* list = map->buckets[index];
+//    package_t* p = find(map, list->head, k);
+//    if (p->cur == NULL) {
+//        free(p);
+//        return NULL;
+//    }
+//    void* value = p->cur->d->value;
+//    free(p);
+//    return value;
+    return NULL;
 }
 void free_linked_list(hashmap_t* map, linked_list_t *list){
     node_t *node = list->head->next;
