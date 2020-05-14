@@ -144,51 +144,50 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
 }
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
-//    size_t index = map->hash(k);
-//    index = compression(map, index);
-//    if (map->buckets[index] == NULL){
-//        map->buckets[index] = list_initialize();
-//        map->size++;
-//    }
-//    linked_list_insert(map, map->buckets[index], k, v);
+    size_t index = map->hash(k);
+    index = compression(map, index);
+    if (map->buckets[index] == NULL){
+        map->buckets[index] = list_initialize();
+        map->size++;
+    }
+    linked_list_insert(map, map->buckets[index], k, v);
 }
 
 void hash_map_remove_entry(struct hash_map* map, void* k) {
-//    size_t index = map->hash(k);
-//    index = compression(map, index);
-//    linked_list_t* list = map->buckets[index];
-//    if (list != NULL)
-//        linked_list_remove(map, list, k);
+    size_t index = map->hash(k);
+    index = compression(map, index);
+    linked_list_t* list = map->buckets[index];
+    if (list != NULL)
+        linked_list_remove(map, list, k);
 }
 
 void* hash_map_get_value_ref(struct hash_map* map, void* k) {
-//    size_t index = map->hash(k);
-//    index = compression(map, index);
-//    linked_list_t* list = map->buckets[index];
-//    package_t* p = find(map, list->head, k);
-//    if (p->cur == NULL) {
-//        free(p);
-//        return NULL;
-//    }
-//    void* value = p->cur->d->value;
-//    free(p);
-//    return value;
-    return NULL;
+    size_t index = map->hash(k);
+    index = compression(map, index);
+    linked_list_t* list = map->buckets[index];
+    package_t* p = find(map, list->head, k);
+    if (p->cur == NULL) {
+        free(p);
+        return NULL;
+    }
+    void* value = p->cur->d->value;
+    free(p);
+    return value;
 }
 void free_linked_list(hashmap_t* map, linked_list_t *list){
-//    node_t *node = list->head->next;
-//    while (node != NULL) {
-//        node_t* temp = node->next;
-//        map->key_destruct(node->d->k);
-//        map->value_destruct(node->d->value);
-//        free(node->d);
-//        pthread_mutex_destroy(&node->lock);
-//        free(node);
-//        node = temp;
-//    }
-//    pthread_mutex_destroy(&(list->head->lock));
-//    free(list->head);
-//    free(list);
+    node_t *node = list->head->next;
+    while (node != NULL) {
+        node_t* temp = node->next;
+        map->key_destruct(node->d->k);
+        map->value_destruct(node->d->value);
+        free(node->d);
+        pthread_mutex_destroy(&node->lock);
+        free(node);
+        node = temp;
+    }
+    pthread_mutex_destroy(&(list->head->lock));
+    free(list->head);
+    free(list);
 }
 void hash_map_destroy(struct hash_map* map) {
     for (int i = 0; i < map->capacity; i++) {
