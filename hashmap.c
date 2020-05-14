@@ -188,8 +188,9 @@ void free_linked_list(hashmap_t* map, linked_list_t *list){
 }
 void hash_map_destroy(struct hash_map* map) {
     for (int i = 0; i < map->capacity; i++) {
-        if (map->buckets[i] != NULL)
+        if (map->buckets[i] != NULL){
             free_linked_list(map, map->buckets[i]);
+        }
     }
     free(map->buckets);
     free(map);
