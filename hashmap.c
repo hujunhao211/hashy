@@ -41,6 +41,9 @@ package_t* find(hashmap_t* map,node_t* node,void* key){
 }
 
 void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
+    if (k == NULL || v == NULL){
+        return;
+    }
     package_t* p = find(map,list->head, k);
     node_t *next = NULL;
     if (p->cur == NULL) {
