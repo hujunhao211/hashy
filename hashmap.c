@@ -24,7 +24,7 @@ package_t* find(hashmap_t* map,node_t* node,void* key){
 //        printf("cur is %d\n",*(int*)cur->d->k);
         pthread_mutex_lock(&cur->lock);
 //        printf("cur1 is %d\n",*(int*)cur->d->k);
-        if (map->cmp(key,cur->d->k) == 0){
+        if (map->cmp(key,cur->d->k) == 1){
             package->prev = prev;
             package->cur = cur;
             return package;
