@@ -130,9 +130,9 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     hashmap->buckets = malloc(sizeof(linked_list_t*) * 50);
     hashmap->size = 0;
     hashmap->capacity = 50;
-//    for (int i = 0; i < hashmap->capacity; i++) {
-//        hashmap->buckets[i] = NULL;
-//    }
+    for (int i = 0; i < hashmap->capacity; i++) {
+        hashmap->buckets[i] = NULL;
+    }
     hashmap->hash = hash;
     hashmap->key_destruct = key_destruct;
     hashmap->value_destruct = value_destruct;
