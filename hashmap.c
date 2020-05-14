@@ -87,6 +87,7 @@ void linked_list_remove(hashmap_t* map,linked_list_t* list,void* k){
 //        free(p->cur->d->k);
         map->value_destruct(p->cur->d->value);
 //        free(p->cur->d->value);
+        free(p->cur->d);
         free(p->cur);
     }
     free(p);
