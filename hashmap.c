@@ -176,19 +176,19 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     return NULL;
 }
 void free_linked_list(hashmap_t* map, linked_list_t *list){
-    node_t *node = list->head->next;
-    while (node != NULL) {
-        node_t* temp = node->next;
-        map->key_destruct(node->d->k);
-        map->value_destruct(node->d->value);
-        free(node->d);
-        pthread_mutex_destroy(&node->lock);
-        free(node);
-        node = temp;
-    }
-    pthread_mutex_destroy(&(list->head->lock));
-    free(list->head);
-    free(list);
+//    node_t *node = list->head->next;
+//    while (node != NULL) {
+//        node_t* temp = node->next;
+//        map->key_destruct(node->d->k);
+//        map->value_destruct(node->d->value);
+//        free(node->d);
+//        pthread_mutex_destroy(&node->lock);
+//        free(node);
+//        node = temp;
+//    }
+//    pthread_mutex_destroy(&(list->head->lock));
+//    free(list->head);
+//    free(list);
 }
 void hash_map_destroy(struct hash_map* map) {
     for (int i = 0; i < map->capacity; i++) {
