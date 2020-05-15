@@ -81,12 +81,12 @@ void linked_list_remove(hashmap_t* map,linked_list_t* list,void* k){
 //    printf("remove %d\n",*((int *)p->cur->d->value));
     if (p->cur != NULL){
         p->prev->next = p->cur->next;
-        pthread_mutex_unlock(&p->cur->lock);
-        pthread_mutex_unlock(&p->prev->lock);
         p->cur->next = NULL;
         map->key_destruct(p->cur->d->k);
 //        free(p->cur->d->k);
         map->value_destruct(p->cur->d->value);
+        pthread_mutex_unlock(&p->cur->lock);
+        pthread_mutex_unlock(&p->prev->lock);
 //        free(p->cur->d->value);
         free(p->cur->d);
         free(p->cur);
