@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "hashmap.h"
 
+pthread_mutex_t lock_s = PTHREAD_MUTEX_INITIALIZER；
 linked_list_t* list_initialize(void){
     linked_list_t* list = malloc(sizeof(linked_list_t));
     node_t* node = malloc(sizeof(node_t));
@@ -147,6 +148,7 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
 }
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
+    pthread_mutex_lock(lock_s);
     size_t index = map->hash(k);
     index = compression(map, index);
     if (map->buckets[index] == NULL){
@@ -154,17 +156,21 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
         map->size++;
     }
     linked_list_insert(map, map->buckets[index], k, v);
+    pthread_mutex_unlock(lock_s);
 }
 
 void hash_map_remove_entry(struct hash_map* map, void* k) {
+    pthread_mutex_lock(lock_s);
     size_t index = map->hash(k);
     index = compression(map, index);
     linked_list_t* list = map->buckets[index];
     if (list != NULL)
         linked_list_remove(map, list, k);
+    pthread_mutex_unlock(lock_s);
 }
 
 void* hash_map_get_value_ref(struct hash_map* map, void* k) {
+    pthread_mutex_lock(lock_s);
     size_t index = map->hash(k);
     index = compression(map, index);
     linked_list_t* list = map->buckets[index];
@@ -172,14 +178,17 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
         package_t* p = find(map, list->head, k);
         if (p->cur == NULL) {
             free(p);
+             pthread_mutex_unlock(lock_s);
             return NULL;
         }
         void* value = p->cur->d->value;
         pthread_mutex_unlock(&p->cur->lock);
         pthread_mutex_unlock(&p->prev->lock);
         free(p);
+        pthread_mutex_unlock(lock_s);
         return value;
     } else{
+         pthread_mutex_unlock(lock_s);
         return NULL;
     }
 }
@@ -200,6 +209,7 @@ void free_linked_list(hashmap_t* map, linked_list_t *list){
     free(list);
 }
 void hash_map_destroy(struct hash_map* map) {
+    pthread_mutex_lock(lock_s);
     for (int i = 0; i < map->capacity; i++) {
         if (map->buckets[i] != NULL){
             free_linked_list(map, map->buckets[i]);
@@ -207,4 +217,5 @@ void hash_map_destroy(struct hash_map* map) {
     }
     free(map->buckets);
     free(map);
+    pthread_mutex_unlock(lock_s);
 }
