@@ -68,9 +68,8 @@ void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
     } else{
 //        printf("here\n");
         map->value_destruct(p->cur->d->value);
-        map->value_destruct(p->cur->d->k);
+        map->value_destruct(k);
         p->cur->d->value = v;
-        p->cur->d->k = k;
         pthread_mutex_unlock(&p->cur->lock);
         pthread_mutex_unlock(&p->prev->lock);
     }
