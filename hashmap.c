@@ -178,6 +178,7 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     free(p);
     return value;
 }
+
 void free_linked_list(hashmap_t* map, linked_list_t *list){
     node_t *node = list->head->next;
     while (node != NULL) {
