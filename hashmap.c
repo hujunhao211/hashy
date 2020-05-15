@@ -19,24 +19,24 @@ package_t* find(hashmap_t* map,node_t* node,void* key){
     package->prev = NULL;
     prev = node;
     int i = 0;
-    pthread_mutex_lock(&prev->lock);
+//    pthread_mutex_lock(&prev->lock);
     while ((cur = prev->next) != NULL) {
 //        printf("cur is %d\n",*(int*)cur->d->k);
-        pthread_mutex_lock(&cur->lock);
+//        pthread_mutex_lock(&cur->lock);
 //        printf("cur1 is %d\n",*(int*)cur->d->k);
         if (map->cmp(key,cur->d->k) == 1){
             package->prev = prev;
             package->cur = cur;
             return package;
         }
-        pthread_mutex_unlock(&prev->lock);
+//        pthread_mutex_unlock(&prev->lock);
         prev = cur;
 //        printf("i is %d\n",i);
         i++;
     }
 //    if (node->next)
 //    printf("prev is %d\n",*(int*)prev->d->k);
-    pthread_mutex_unlock(&prev->lock);
+//    pthread_mutex_unlock(&prev->lock);
     return package;
 }
 
@@ -47,10 +47,10 @@ void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
     package_t* p = find(map,list->head, k);
     node_t *next = NULL;
     if (p->cur == NULL) {
-        pthread_mutex_lock(&(list->head->lock));
+//        pthread_mutex_lock(&(list->head->lock));
         if (list->head->next != NULL){
-            next = list->head->next;
-            pthread_mutex_lock(&(next->lock));
+//            next = list->head->next;
+//            pthread_mutex_lock(&(next->lock));
         }
         data_t* data = malloc(sizeof(data_t));
         data->k = k;
@@ -69,8 +69,8 @@ void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
 //        printf("here\n");
         map->value_destruct(p->cur->d->value);
         p->cur->d->value = v;
-        pthread_mutex_unlock(&p->cur->lock);
-        pthread_mutex_unlock(&p->prev->lock);
+//        pthread_mutex_unlock(&p->cur->lock);
+//        pthread_mutex_unlock(&p->prev->lock);
     }
     free(p);
 }
@@ -80,8 +80,8 @@ void linked_list_remove(hashmap_t* map,linked_list_t* list,void* k){
 //    printf("remove %d\n",*((int *)p->cur->d->value));
     if (p->cur != NULL){
         p->prev->next = p->cur->next;
-        pthread_mutex_unlock(&p->cur->lock);
-        pthread_mutex_unlock(&p->prev->lock);
+//        pthread_mutex_unlock(&p->cur->lock);
+//        pthread_mutex_unlock(&p->prev->lock);
         p->cur->next = NULL;
         map->key_destruct(p->cur->d->k);
 //        free(p->cur->d->k);
@@ -172,8 +172,6 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
         return NULL;
     }
     void* value = p->cur->d->value;
-    pthread_mutex_unlock(&p->cur->lock);
-    pthread_mutex_unlock(&p->prev->lock);
     free(p);
     return value;
 }
