@@ -168,16 +168,20 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     size_t index = map->hash(k);
     index = compression(map, index);
     linked_list_t* list = map->buckets[index];
-    package_t* p = find(map, list->head, k);
-    if (p->cur == NULL) {
+    if (list != NULL){
+        package_t* p = find(map, list->head, k);
+        if (p->cur == NULL) {
+            free(p);
+            return NULL;
+        }
+        void* value = p->cur->d->value;
+        pthread_mutex_unlock(&p->cur->lock);
+        pthread_mutex_unlock(&p->prev->lock);
         free(p);
+        return value;
+    } else{
         return NULL;
     }
-    void* value = p->cur->d->value;
-    pthread_mutex_unlock(&p->cur->lock);
-    pthread_mutex_unlock(&p->prev->lock);
-    free(p);
-    return value;
 }
 
 void free_linked_list(hashmap_t* map, linked_list_t *list){
