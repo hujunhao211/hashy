@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "hashmap.h"
 
-pthread_mutex_t lock_s = PTHREAD_MUTEX_INITIALIZER；
+pthread_mutex_t lock_s = PTHREAD_MUTEX_INITIALIZER;
 linked_list_t* list_initialize(void){
     linked_list_t* list = malloc(sizeof(linked_list_t));
     node_t* node = malloc(sizeof(node_t));
