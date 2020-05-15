@@ -73,6 +73,7 @@ void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
 //        pthread_mutex_unlock(&p->prev->lock);
     }
     free(p);
+    
 }
 
 void linked_list_remove(hashmap_t* map,linked_list_t* list,void* k){
