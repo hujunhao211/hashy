@@ -199,4 +199,3 @@ void hash_map_destroy(struct hash_map* map) {
     free(map->buckets);
     free(map);
 }
-
