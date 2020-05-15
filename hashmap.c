@@ -36,7 +36,7 @@ package_t* find(hashmap_t* map,node_t* node,void* key){
     }
 //    if (node->next)
 //    printf("prev is %d\n",*(int*)prev->d->k);
-//    pthread_mutex_unlock(&prev->lock);
+    pthread_mutex_unlock(&prev->lock);
     return package;
 }
 
