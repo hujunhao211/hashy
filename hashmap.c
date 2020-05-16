@@ -103,10 +103,10 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
         return NULL;
     }
     hashmap_t *hashmap = malloc(sizeof(struct hash_map));
-    hashmap->buckets = malloc(sizeof(linked_list_t*) * 800);
-    array = malloc(sizeof(pthread_mutex_t) * 800);
+    hashmap->buckets = malloc(sizeof(linked_list_t*) * 1000);
+    array = malloc(sizeof(pthread_mutex_t) * 1000);
     hashmap->size = 0;
-    hashmap->capacity = 800;
+    hashmap->capacity = 1000;
     for (int i = 0; i < hashmap->capacity; i++) {
         hashmap->buckets[i] = NULL;
     }
