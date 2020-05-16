@@ -17,7 +17,7 @@ package_t* find(hashmap_t* map,node_t* node,void* key){
     node_t *cur, *prev;
     package_t* package = malloc(sizeof(package_t));
     package->cur = NULL;
-    package->prev = NULL;
+    package->prev = node;
     prev = node;
     int i = 0;
 //    pthread_mutex_lock(&prev->lock);
