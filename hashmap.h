@@ -17,6 +17,7 @@ typedef struct linked_list_node {
 }node_t;
 
 typedef struct linked_list{
+    pthread_mutex_t list_lock;
     struct linked_list_node* head;
 }linked_list_t;
 
