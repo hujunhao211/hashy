@@ -146,7 +146,7 @@ void rehash(hashmap_t* map){
     free(old_mutex);
     map->buckets = new_bucket;
     for (int i = 0; i < old_capacity; i++){
-        if (old_capacity[i] != NULL){
+        if (old_bucket[i] != NULL){
             node_t* cur = old_bucket[i]->head->next;
             while (cur != NULL) {
                 size_t index = map->hash(cur->d->k);
