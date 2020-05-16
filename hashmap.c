@@ -152,14 +152,14 @@ void rehash(hashmap_t* map){
     for (int i = 0; i < old_capacity; i++){
         pthread_mutex_lock(&map->buckets[i]->list_lock);
     }
-    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 30000);
+    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 2);
     linked_list_t** old_bucket = map->buckets;
-    map->capacity = map->capacity * 30000;
+    map->capacity = map->capacity * 2;
     for (int i = 0; i < map->capacity; i++) {
        new_bucket[i] = NULL;
     }
     map->buckets = new_bucket;
-    for (int i = 0; i < map->capacity; i++){
+    for (int i = 0; i < old_capacity; i++){
         node_t* cur = old_bucket[i]->head->next;
         while (cur != NULL) {
             size_t index = map->hash(cur->d->k);
@@ -167,7 +167,20 @@ void rehash(hashmap_t* map){
             if (map->buckets[index] == NULL){
                 map->buckets[index] = list_initialize();
             }
-            linked_list_insert(map,map->buckets[index], cur->d->k, cur->d->value);
+            linked_list_t* list = map->buckets[index];
+            data_t* data = malloc(sizeof(data_t));
+            data->k = cur->d->k;
+            data->value = cur->d->value;
+            node_t* node = malloc(sizeof(node_t));
+            node->d = data;
+            //        printf("node data: %d\n",*(int*)node->d->k);
+            node->next = list->head->next;
+            list->head->next = node;
+            //        printf("head next is %p\n",list->head->next);
+            //        pthread_mutex_unlock(&(list->head->lock));
+            //        if (next != NULL)
+            //            pthread_mutex_unlock(&(next->lock));
+            pthread_mutex_init(&node->lock, NULL);
             cur = cur->next;
         }
     }
@@ -181,6 +194,8 @@ void rehash(hashmap_t* map){
     free(old_bucket);
     lock_rehash = 1;
 }
+
+
 
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
