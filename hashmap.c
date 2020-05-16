@@ -172,7 +172,7 @@ void rehash(hashmap_t* map){
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     pthread_mutex_lock(&map->lock);
-    if (map->size * 0.75 >= map->capacity){
+    if (map->size * 0.6 >= map->capacity){
         lock_rehash = 1;
         rehash(map);
     }
