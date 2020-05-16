@@ -188,7 +188,7 @@ void hash_map_remove_entry(struct hash_map* map, void* k) {
     if (list != NULL){
         
         linked_list_remove(map, list, k);
-        
+
     }
     pthread_mutex_unlock(&map->lock);
 }
@@ -220,11 +220,9 @@ void free_linked_list(hashmap_t* map, linked_list_t *list){
         map->key_destruct(node->d->k);
         map->value_destruct(node->d->value);
         free(node->d);
-//        pthread_mutex_destroy(&node->lock);
         free(node);
         node = temp;
     }
-//    pthread_mutex_destroy(&(list->head->lock));
     free(list->head);
     free(list);
 }
