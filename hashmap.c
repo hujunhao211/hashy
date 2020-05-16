@@ -40,7 +40,6 @@ package_t* find(hashmap_t* map,node_t* node,void* key){
 //    pthread_mutex_unlock(&prev->lock);
     return package;
 }
-
 void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
     if (k == NULL || v == NULL){
         return;
