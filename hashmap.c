@@ -147,6 +147,9 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     return hashmap;
 }
 void rehash(hashmap_t* map){
+    while (1) {
+        sleep(10);
+    }
     int old_capacity = map->capacity;
     linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 20000);
     linked_list_t** old_bucket = map->buckets;
