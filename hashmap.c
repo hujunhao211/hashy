@@ -179,9 +179,7 @@ void hash_map_remove_entry(struct hash_map* map, void* k) {
     index = compression(map, index);
     linked_list_t* list = map->buckets[index];
     if (list != NULL){
-        
         linked_list_remove(map, list, k);
-
     }
     pthread_mutex_unlock(&map->lock);
 }
