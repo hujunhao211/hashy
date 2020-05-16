@@ -136,8 +136,8 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
         return NULL;
     }
     hashmap_t *hashmap = malloc(sizeof(struct hash_map));
-    hashmap->buckets = malloc(sizeof(linked_list_t*) * 30);
-    array = malloc(sizeof(pthread_mutex_t) * 30);
+    hashmap->buckets = malloc(sizeof(linked_list_t*) * 3000);
+    array = malloc(sizeof(pthread_mutex_t) * 3000);
     hashmap->size = 0;
     hashmap->capacity = 30;
     for (int i = 0; i < hashmap->capacity; i++) {
