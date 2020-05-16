@@ -126,13 +126,6 @@ void rehash(hashmap_t* map){
     for (int i = 0; i < map->capacity; i++) {
        new_bucket[i] = NULL;
     }
-//    pthread_mutex_t *new_mutex = malloc(sizeof(pthread_mutex_t) * map->capacity);
-//    for (int i = 0; i < map->capacity; i++){
-//        pthread_mutex_init(&new_mutex[i], NULL);
-//        pthread_mutex_lock(&new_mutex[i]);
-//    }
-//    pthread_mutex_t *old_mutex = array;
-//    array = new_mutex;
     map->buckets = new_bucket;
     for (int i = 0; i < old_capacity; i++){
         if (old_bucket[i] != NULL){
