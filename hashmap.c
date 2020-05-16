@@ -141,24 +141,26 @@ void rehash(hashmap_t* map){
     free(old_mutex);
     map->buckets = new_bucket;
     for (int i = 0; i < old_capacity; i++){
-        node_t* cur = old_bucket[i]->head->next;
-        while (cur != NULL) {
-            size_t index = map->hash(cur->d->k);
-            index = compression(map, index);
-            if (map->buckets[index] == NULL){
-                map->buckets[index] = list_initialize(index);
+        if (old_bucket[i] != NULL){
+            node_t* cur = old_bucket[i]->head->next;
+            while (cur != NULL) {
+                size_t index = map->hash(cur->d->k);
+                index = compression(map, index);
+                if (map->buckets[index] == NULL){
+                    map->buckets[index] = list_initialize(index);
+                }
+                linked_list_t* list = map->buckets[index];
+                data_t* data = malloc(sizeof(data_t));
+                data->k = cur->d->k;
+                data->value = cur->d->value;
+                node_t* node = malloc(sizeof(node_t));
+                node->d = data;
+                //        printf("node data: %d\n",*(int*)node->d->k);
+                node->next = list->head->next;
+                list->head->next = node;
+    //            pthread_mutex_init(&node->lock, NULL);
+                cur = cur->next;
             }
-            linked_list_t* list = map->buckets[index];
-            data_t* data = malloc(sizeof(data_t));
-            data->k = cur->d->k;
-            data->value = cur->d->value;
-            node_t* node = malloc(sizeof(node_t));
-            node->d = data;
-            //        printf("node data: %d\n",*(int*)node->d->k);
-            node->next = list->head->next;
-            list->head->next = node;
-//            pthread_mutex_init(&node->lock, NULL);
-            cur = cur->next;
         }
     }
     for (int i = 0; i < old_capacity; i++){
@@ -191,7 +193,7 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     while (lock_rehash == 1) {
         usleep(1000);
     }
-    if (map->size >= map->capacity){
+    if ((map->size / map->capacity )> 0.75){
         lock_rehash = 1;
         for (int i = 0; i < map->capacity; i++){
             pthread_mutex_lock(&array[i]);

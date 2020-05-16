@@ -30,6 +30,7 @@ struct hash_map{
     linked_list_t** buckets;
     int size;
     int capacity;
+    pthread_mutex_t lock;
     size_t (*hash)(void*);
     int (*cmp)(void*,void*);
     void (*key_destruct)(void*);
