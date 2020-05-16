@@ -90,7 +90,6 @@ void linked_traverse(linked_list_t* list){
     }
     printf("\n");
 }
-
 size_t compression(hashmap_t* map,size_t hash_id){
     return hash_id % map->capacity;
 }
