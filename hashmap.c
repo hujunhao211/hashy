@@ -144,7 +144,7 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
         hashmap->buckets[i] = NULL;
     }
     for (int i = 0; i < hashmap->capacity; i++) {
-        pthread_mutex_init(&(array[index]), NULL);
+        pthread_mutex_init(&(array[i]), NULL);
     }
     hashmap->hash = hash;
     hashmap->key_destruct = key_destruct;
