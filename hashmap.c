@@ -146,12 +146,16 @@ void rehash(hashmap_t* map){
                     map->buckets[index] = list_initialize(index);
                 }
                 linked_list_t* list = map->buckets[index];
-                data_t* data = cur->next;
-                            //        printf("node data: %d\n",*(int*)node->d->k);
-                cur->next = list->head->next;
-                list->head->next = cur;
-                //            pthread_mutex_init(&node->lock, NULL);
-                cur = data;
+                data_t* data = malloc(sizeof(data_t));
+                data->k = cur->d->k;
+                data->value = cur->d->value;
+                node_t* node = malloc(sizeof(node_t));
+                node->d = data;
+                //        printf("node data: %d\n",*(int*)node->d->k);
+                node->next = list->head->next;
+                list->head->next = node;
+    //            pthread_mutex_init(&node->lock, NULL);
+                cur = cur->next;
             }
         }
     }
@@ -208,7 +212,7 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     pthread_mutex_lock(&map->lock);
     size_t index = map->hash(k);
     index = compression(map, index);
-    
+
     linked_list_t* list = map->buckets[index];
     if (list == NULL){
         pthread_mutex_unlock(&map->lock);
