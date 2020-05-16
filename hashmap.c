@@ -56,18 +56,12 @@ void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
         node->next = p->prev->next;
         p->prev->next = node;
 //        printf("head next is %p\n",list->head->next);
-//        pthread_mutex_unlock(&(list->head->lock));
-//        if (next != NULL)
-//            pthread_mutex_unlock(&(next->lock));
-//        pthread_mutex_init(&node->lock, NULL);
     } else{
 //        printf("here\n");
         map->value_destruct(p->cur->d->value);
         map->key_destruct(p->cur->d->k);
         p->cur->d->value = v;
         p->cur->d->k = k;
-//        pthread_mutex_unlock(&p->cur->lock);
-//        pthread_mutex_unlock(&p->prev->lock);
     }
     free(p);
     
@@ -109,10 +103,10 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
         return NULL;
     }
     hashmap_t *hashmap = malloc(sizeof(struct hash_map));
-    hashmap->buckets = malloc(sizeof(linked_list_t*) * 100);
-    array = malloc(sizeof(pthread_mutex_t) * 100);
+    hashmap->buckets = malloc(sizeof(linked_list_t*) * 4000);
+    array = malloc(sizeof(pthread_mutex_t) * 4000);
     hashmap->size = 0;
-    hashmap->capacity = 100;
+    hashmap->capacity = 4000;
     for (int i = 0; i < hashmap->capacity; i++) {
         hashmap->buckets[i] = NULL;
     }
