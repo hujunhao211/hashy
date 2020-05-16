@@ -152,9 +152,9 @@ void rehash(hashmap_t* map){
     for (int i = 0; i < old_capacity; i++){
         pthread_mutex_lock(&map->buckets[i]->list_lock);
     }
-    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 2);
+    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 20);
     linked_list_t** old_bucket = map->buckets;
-    map->capacity = map->capacity * 2;
+    map->capacity = map->capacity * 20;
     for (int i = 0; i < map->capacity; i++) {
        new_bucket[i] = NULL;
     }
