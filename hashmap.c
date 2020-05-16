@@ -158,15 +158,8 @@ void rehash(hashmap_t* map){
     for (int i = 0; i < old_capacity; i++){
 //        pthread_mutex_destroy(&old_bucket[i]->list_lock);
 //        pthread_mutex_destroy(&array[i]);
-        node_t* cur = old_bucket[i]->head->next;
-        while (cur != NULL) {
-            node_t* next = cur->next;
-            free(cur->d);
-            free(cur);
-            pthread_mutex_destroy(&cur->lock);
-            cur = next;
-        }
-        free(old_bucket[i]->head);
+        if (old_bucket[i] != NULL)
+            free(old_bucket[i]->head);
     }
     free(old_bucket);
 //    for (int i = 0; i < map->capacity; i++){
@@ -178,7 +171,7 @@ void rehash(hashmap_t* map){
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     pthread_mutex_lock(&map->lock);
-    if ((map->size / map->capacity )> 0.75){
+    if (map->size * 0.75 >= map->capacity){
         lock_rehash = 1;
         rehash(map);
     }
@@ -186,9 +179,9 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     index = compression(map, index);
     if (map->buckets[index] == NULL){
         map->buckets[index] = list_initialize(index);
-        map->size++;
     }
     linked_list_insert(map, map->buckets[index], k, v);
+    map->size++;
     pthread_mutex_unlock(&map->lock);
 }
 
