@@ -32,6 +32,7 @@ package_t* find(hashmap_t* map,node_t* node,void* key){
 //        printf("i is %d\n",i);
         i++;
     }
+    package->prev = prev;
     return package;
 }
 void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
@@ -52,7 +53,7 @@ void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
         node_t* node = malloc(sizeof(node_t));
         node->d = data;
 //        printf("node data: %d\n",*(int*)node->d->k);
-        node->next = NULL;
+        node->next = p->prev->next;
         p->prev->next = node;
 //        printf("head next is %p\n",list->head->next);
 //        pthread_mutex_unlock(&(list->head->lock));
