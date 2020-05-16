@@ -148,12 +148,13 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
 }
 void rehash(hashmap_t* map){
     int old_capacity = map->capacity;
-    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 2);
+    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 2000);
     linked_list_t** old_bucket = map->buckets;
-    map->capacity = map->capacity * 2;
+    map->capacity = map->capacity * 2000;
     for (int i = 0; i < map->capacity; i++) {
        new_bucket[i] = NULL;
     }
+    
     map->buckets = new_bucket;
     for (int i = 0; i < old_capacity; i++){
         node_t* cur = old_bucket[i]->head->next;
