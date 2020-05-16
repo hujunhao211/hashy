@@ -163,9 +163,6 @@ void rehash(hashmap_t* map){
         free(old_bucket[i]);
     }
     free(old_bucket);
-//    for (int i = 0; i < map->capacity; i++){
-//           pthread_mutex_unlock(&new_mutex[i]);
-//    }
     lock_rehash = 0;
 }
 
