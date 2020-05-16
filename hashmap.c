@@ -146,25 +146,36 @@ void rehash(hashmap_t* map){
                     map->buckets[index] = list_initialize(index);
                 }
                 linked_list_t* list = map->buckets[index];
-                data_t* data = cur->next;
-                            //        printf("node data: %d\n",*(int*)node->d->k);
-                cur->next = list->head->next;
-                list->head->next = cur;
-                //            pthread_mutex_init(&node->lock, NULL);
-                cur = data;
+                data_t* data = malloc(sizeof(data_t));
+                data->k = cur->d->k;
+                data->value = cur->d->value;
+                node_t* node = malloc(sizeof(node_t));
+                node->d = data;
+                //        printf("node data: %d\n",*(int*)node->d->k);
+                node->next = list->head->next;
+                list->head->next = node;
+    //            pthread_mutex_init(&node->lock, NULL);
+                cur = cur->next;
             }
         }
     }
     for (int i = 0; i < old_capacity; i++){
 //        pthread_mutex_destroy(&old_bucket[i]->list_lock);
 //        pthread_mutex_destroy(&array[i]);
-        if (old_bucket[i] != NULL)
-            free(old_bucket[i]->head);
+        node_t* cur = old_bucket[i]->head->next;
+        while (cur != NULL) {
+            node_t* next = cur->next;
+            free(cur->d);
+            free(cur);
+            pthread_mutex_destroy(&cur->lock);
+            cur = next;
+        }
+        free(old_bucket[i]->head);
     }
     free(old_bucket);
-//    for (int i = 0; i < map->capacity; i++){
-//           pthread_mutex_unlock(&new_mutex[i]);
-//    }
+    for (int i = 0; i < map->capacity; i++){
+           pthread_mutex_unlock(&new_mutex[i]);
+    }
     lock_rehash = 0;
 }
 
@@ -179,9 +190,9 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     index = compression(map, index);
     if (map->buckets[index] == NULL){
         map->buckets[index] = list_initialize(index);
+        map->size++;
     }
     linked_list_insert(map, map->buckets[index], k, v);
-    map->size++;
     pthread_mutex_unlock(&map->lock);
 }
 
@@ -201,7 +212,7 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     pthread_mutex_lock(&map->lock);
     size_t index = map->hash(k);
     index = compression(map, index);
-
+    
     linked_list_t* list = map->buckets[index];
     if (list == NULL){
         pthread_mutex_unlock(&map->lock);
