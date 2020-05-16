@@ -176,10 +176,6 @@ void rehash(hashmap_t* map){
             //        printf("node data: %d\n",*(int*)node->d->k);
             node->next = list->head->next;
             list->head->next = node;
-            //        printf("head next is %p\n",list->head->next);
-            //        pthread_mutex_unlock(&(list->head->lock));
-            //        if (next != NULL)
-            //            pthread_mutex_unlock(&(next->lock));
             pthread_mutex_init(&node->lock, NULL);
             cur = cur->next;
         }
