@@ -111,7 +111,7 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     hashmap->buckets = malloc(sizeof(linked_list_t*) * 3000);
     array = malloc(sizeof(pthread_mutex_t) * 3000);
     hashmap->size = 0;
-    hashmap->capacity = 30;
+    hashmap->capacity = 3000;
     for (int i = 0; i < hashmap->capacity; i++) {
         hashmap->buckets[i] = NULL;
     }
@@ -203,11 +203,11 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     }
     size_t index = map->hash(k);
     index = compression(map, index);
+    pthread_mutex_lock(&array[index]);
     if (map->buckets[index] == NULL){
         map->buckets[index] = list_initialize(index);
         map->size++;
     }
-    pthread_mutex_lock(&array[index]);
     linked_list_insert(map, map->buckets[index], k, v);
     pthread_mutex_unlock(&array[index]);
 }
