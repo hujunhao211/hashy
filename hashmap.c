@@ -12,7 +12,7 @@ linked_list_t* list_initialize(void){
     pthread_mutex_init(&list->list_lock, NULL);
     return list;
 }
-int lock_rehash = 1;
+int lock_rehash = 0;
 package_t* find(hashmap_t* map,node_t* node,void* key){
     node_t *cur, *prev;
     package_t* package = malloc(sizeof(package_t));
@@ -147,14 +147,14 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     return hashmap;
 }
 void rehash(hashmap_t* map){
-    lock_rehash = 0;
+    lock_rehash = 1;
     int old_capacity = map->capacity;
     for (int i = 0; i < old_capacity; i++){
         pthread_mutex_lock(&map->buckets[i]->list_lock);
     }
-    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 30000);
+    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 2);
     linked_list_t** old_bucket = map->buckets;
-    map->capacity = map->capacity * 30000;
+    map->capacity = map->capacity * 2;
     for (int i = 0; i < map->capacity; i++) {
        new_bucket[i] = NULL;
     }
@@ -192,14 +192,14 @@ void rehash(hashmap_t* map){
         free(old_bucket[i]);
     }
     free(old_bucket);
-    lock_rehash = 1;
+    lock_rehash = 0;
 }
 
 
 
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
-    while (!lock_rehash) {
+    while (lock_rehash) {
         sleep(1);
     }
     if (map->size == map->capacity){
@@ -217,7 +217,7 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
 }
 
 void hash_map_remove_entry(struct hash_map* map, void* k) {
-    while (!lock_rehash) {
+    while (lock_rehash) {
         sleep(1);
     }
     size_t index = map->hash(k);
@@ -231,7 +231,7 @@ void hash_map_remove_entry(struct hash_map* map, void* k) {
 }
 
 void* hash_map_get_value_ref(struct hash_map* map, void* k) {
-    while (!lock_rehash) {
+    while (lock_rehash) {
         sleep(1);
     }
     size_t index = map->hash(k);
