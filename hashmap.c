@@ -108,8 +108,8 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
         return NULL;
     }
     hashmap_t *hashmap = malloc(sizeof(struct hash_map));
-    hashmap->buckets = malloc(sizeof(linked_list_t*) * 100);
-    array = malloc(sizeof(pthread_mutex_t) * 100);
+    hashmap->buckets = malloc(sizeof(linked_list_t*) * 5);
+    array = malloc(sizeof(pthread_mutex_t) * 5);
     hashmap->size = 0;
     hashmap->capacity = 100;
     for (int i = 0; i < hashmap->capacity; i++) {
@@ -168,7 +168,7 @@ void rehash(hashmap_t* map){
     }
     for (int i = 0; i < old_capacity; i++){
 //        pthread_mutex_destroy(&old_bucket[i]->list_lock);
-        pthread_mutex_destroy(&array[i]);
+//        pthread_mutex_destroy(&array[i]);
         node_t* cur = old_bucket[i]->head->next;
         while (cur != NULL) {
             node_t* next = cur->next;
@@ -186,7 +186,7 @@ void rehash(hashmap_t* map){
     }
     free(old_bucket);
     for (int i = 0; i < map->capacity; i++){
-           pthread_mutex_unlock(&new_mutex[i]);
+        pthread_mutex_unlock(&new_mutex[i]);
     }
     lock_rehash = 0;
 }
