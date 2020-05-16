@@ -160,6 +160,7 @@ void rehash(hashmap_t* map){
 //        pthread_mutex_destroy(&array[i]);
         if (old_bucket[i] != NULL)
             free(old_bucket[i]->head);
+        free(old_bucket[i]);
     }
     free(old_bucket);
 //    for (int i = 0; i < map->capacity; i++){
