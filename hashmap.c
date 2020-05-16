@@ -9,7 +9,7 @@ linked_list_t* list_initialize(ssize_t index){
     node->next = NULL;
     node->d = NULL;
     //    node->prev = NULL;
-    pthread_mutex_init(&node->lock, NULL);
+//    pthread_mutex_init(&node->lock, NULL);
     list->head = node;
 //    pthread_mutex_init(&list->list_lock, NULL);
     pthread_mutex_init(&(array[index]), NULL);
@@ -66,7 +66,7 @@ void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
 //        pthread_mutex_unlock(&(list->head->lock));
 //        if (next != NULL)
 //            pthread_mutex_unlock(&(next->lock));
-        pthread_mutex_init(&node->lock, NULL);
+//        pthread_mutex_init(&node->lock, NULL);
     } else{
 //        printf("here\n");
         map->value_destruct(p->cur->d->value);
@@ -143,6 +143,9 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     for (int i = 0; i < hashmap->capacity; i++) {
         hashmap->buckets[i] = NULL;
     }
+    for (int i = 0; i < hashmap->capacity; i++) {
+        pthread_mutex_init(&array[i]);
+    }
     hashmap->hash = hash;
     hashmap->key_destruct = key_destruct;
     hashmap->value_destruct = value_destruct;
@@ -187,7 +190,7 @@ void rehash(hashmap_t* map){
             //        printf("node data: %d\n",*(int*)node->d->k);
             node->next = list->head->next;
             list->head->next = node;
-            pthread_mutex_init(&node->lock, NULL);
+//            pthread_mutex_init(&node->lock, NULL);
             cur = cur->next;
         }
     }
@@ -212,8 +215,6 @@ void rehash(hashmap_t* map){
     free(old_bucket);
     lock_rehash = 0;
 }
-
-
 
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
@@ -282,11 +283,11 @@ void free_linked_list(hashmap_t* map, linked_list_t *list){
         map->key_destruct(node->d->k);
         map->value_destruct(node->d->value);
         free(node->d);
-        pthread_mutex_destroy(&node->lock);
+//        pthread_mutex_destroy(&node->lock);
         free(node);
         node = temp;
     }
-    pthread_mutex_destroy(&(list->head->lock));
+//    pthread_mutex_destroy(&(list->head->lock));
     free(list->head);
     free(list);
 }
