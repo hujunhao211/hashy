@@ -158,20 +158,12 @@ void rehash(hashmap_t* map){
     for (int i = 0; i < old_capacity; i++){
 //        pthread_mutex_destroy(&old_bucket[i]->list_lock);
 //        pthread_mutex_destroy(&array[i]);
-        node_t* cur = old_bucket[i]->head->next;
-        while (cur != NULL) {
-            node_t* next = cur->next;
-            free(cur->d);
-            free(cur);
-            pthread_mutex_destroy(&cur->lock);
-            cur = next;
-        }
         free(old_bucket[i]->head);
     }
     free(old_bucket);
-    for (int i = 0; i < map->capacity; i++){
-           pthread_mutex_unlock(&new_mutex[i]);
-    }
+//    for (int i = 0; i < map->capacity; i++){
+//           pthread_mutex_unlock(&new_mutex[i]);
+//    }
     lock_rehash = 0;
 }
 
