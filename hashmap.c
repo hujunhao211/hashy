@@ -204,10 +204,10 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
         sleep(1);
     }
     if (map->size >= map->capacity){
+        lock_rehash = 1;
         for (int i = 0; i < map->capacity; i++){
             pthread_mutex_lock(&map->buckets[i]->list_lock);
         }
-        lock_rehash = 1;
         rehash(map);
     }
     size_t index = map->hash(k);
@@ -234,7 +234,6 @@ void hash_map_remove_entry(struct hash_map* map, void* k) {
         pthread_mutex_unlock(&list->list_lock);
     }
 }
-
 void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     while (lock_rehash == 1) {
         sleep(1);
