@@ -94,7 +94,6 @@ void linked_traverse(linked_list_t* list){
 size_t compression(hashmap_t* map,size_t hash_id){
     return hash_id % map->capacity;
 }
-
 struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     void (*key_destruct)(void*), void (*value_destruct)(void*)) {
     if (hash == NULL || cmp == NULL || key_destruct == NULL || value_destruct == NULL){
