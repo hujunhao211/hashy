@@ -134,9 +134,9 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
         return NULL;
     }
     hashmap_t *hashmap = malloc(sizeof(struct hash_map));
-    hashmap->buckets = malloc(sizeof(linked_list_t*) * 30000);
+    hashmap->buckets = malloc(sizeof(linked_list_t*) * 300);
     hashmap->size = 0;
-    hashmap->capacity = 30000;
+    hashmap->capacity = 300;
     for (int i = 0; i < hashmap->capacity; i++) {
         hashmap->buckets[i] = NULL;
     }
@@ -148,9 +148,9 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
 }
 void rehash(hashmap_t* map){
     int old_capacity = map->capacity;
-    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 30);
+    linked_list_t** new_bucket = malloc(sizeof(linked_list_t*) * map->capacity * 30000);
     linked_list_t** old_bucket = map->buckets;
-    map->capacity = map->capacity * 30;
+    map->capacity = map->capacity * 30000;
     for (int i = 0; i < map->capacity; i++) {
        new_bucket[i] = NULL;
     }
