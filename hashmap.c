@@ -180,6 +180,7 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     package_t* p = find(map, list->head, k);
     if (p->cur == NULL) {
         free(p);
+        pthread_mutex_unlock(&list->list_lock);
         return NULL;
     }
     void* value = p->cur->d->value;
