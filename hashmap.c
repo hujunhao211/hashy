@@ -184,7 +184,7 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     while (lock_rehash == 1) {
         usleep(1000);
     }
-    if ((map->size  == map->capacity){
+    if (map->size  == map->capacity){
         lock_rehash = 1;
         for (int i = 0; i < map->capacity; i++){
             pthread_mutex_lock(&array[i]);
