@@ -12,7 +12,7 @@ linked_list_t* list_initialize(ssize_t index){
 //    pthread_mutex_init(&node->lock, NULL);
     list->head = node;
 //    pthread_mutex_init(&list->list_lock, NULL);
-    pthread_mutex_init(&(array[index]), NULL);
+//    pthread_mutex_init(&(array[index]), NULL);
     return list;
 }
 package_t* find(hashmap_t* map,node_t* node,void* key){
@@ -143,9 +143,9 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
     for (int i = 0; i < hashmap->capacity; i++) {
         hashmap->buckets[i] = NULL;
     }
-//    for (int i = 0; i < hashmap->capacity; i++) {
-//        pthread_mutex_init(&array[i]);
-//    }
+    for (int i = 0; i < hashmap->capacity; i++) {
+        pthread_mutex_init(&(array[index]), NULL);
+    }
     hashmap->hash = hash;
     hashmap->key_destruct = key_destruct;
     hashmap->value_destruct = value_destruct;
