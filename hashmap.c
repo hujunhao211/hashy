@@ -202,7 +202,7 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     while (lock_rehash) {
         sleep(1);
     }
-    if (map->size == map->capacity){
+    if (map->size >= map->capacity){
         rehash(map);
     }
     size_t index = map->hash(k);
