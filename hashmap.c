@@ -199,7 +199,7 @@ void rehash(hashmap_t* map){
 
 
 void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
-    while (lock_rehash) {
+    while (lock_rehash == 1) {
         sleep(1);
     }
     if (map->size >= map->capacity){
@@ -221,7 +221,7 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
 }
 
 void hash_map_remove_entry(struct hash_map* map, void* k) {
-    while (lock_rehash) {
+    while (lock_rehash == 1) {
         sleep(1);
     }
     size_t index = map->hash(k);
@@ -235,7 +235,7 @@ void hash_map_remove_entry(struct hash_map* map, void* k) {
 }
 
 void* hash_map_get_value_ref(struct hash_map* map, void* k) {
-    while (lock_rehash) {
+    while (lock_rehash == 1) {
         sleep(1);
     }
     size_t index = map->hash(k);
