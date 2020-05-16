@@ -186,9 +186,9 @@ void hash_map_put_entry_move(struct hash_map* map, void* k, void* v) {
     index = compression(map, index);
     if (map->buckets[index] == NULL){
         map->buckets[index] = list_initialize(index);
-        map->size++;
     }
     linked_list_insert(map, map->buckets[index], k, v);
+    map->size++;
     pthread_mutex_unlock(&map->lock);
 }
 
