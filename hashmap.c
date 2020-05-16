@@ -175,9 +175,9 @@ void* hash_map_get_value_ref(struct hash_map* map, void* k) {
     size_t index = map->hash(k);
     index = compression(map, index);
     linked_list_t* list = map->buckets[index];
-    if (list == NULL){
-        return NULL;
-    }
+//    if (list == NULL){
+//        return NULL;
+//    }
     pthread_mutex_lock(&list->list_lock);
     package_t* p = find(map, list->head, k);
     if (p->cur == NULL) {
