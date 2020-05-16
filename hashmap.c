@@ -64,9 +64,7 @@ void linked_list_insert(hashmap_t* map,linked_list_t* list, void* k, void* v){
         p->cur->d->k = k;
     }
     free(p);
-    
 }
-
 void linked_list_remove(hashmap_t* map,linked_list_t* list,void* k){
     package_t* p = find(map,list->head, k);
 //    printf("remove %d\n",*((int *)p->cur->d->value));
