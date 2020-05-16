@@ -155,38 +155,23 @@ void rehash(hashmap_t* map){
                     map->buckets[index] = list_initialize(index);
                 }
                 linked_list_t* list = map->buckets[index];
-                data_t* data = malloc(sizeof(data_t));
-                data->k = cur->d->k;
-                data->value = cur->d->value;
-                node_t* node = malloc(sizeof(node_t));
-                node->d = data;
-                //        printf("node data: %d\n",*(int*)node->d->k);
-                node->next = list->head->next;
-                list->head->next = node;
-    //            pthread_mutex_init(&node->lock, NULL);
-                cur = cur->next;
+                data_t* data = cur->next;
+                            //        printf("node data: %d\n",*(int*)node->d->k);
+                cur->next = list->head->next;
+                list->head->next = cur;
+                //            pthread_mutex_init(&node->lock, NULL);
+                cur = data;
             }
         }
     }
     for (int i = 0; i < old_capacity; i++){
-//        pthread_mutex_destroy(&old_bucket[i]->list_lock);
-        pthread_mutex_destroy(&array[i]);
-        node_t* cur = old_bucket[i]->head->next;
-        while (cur != NULL) {
-            node_t* next = cur->next;
-            free(cur->d);
-            free(cur);
-            pthread_mutex_destroy(&cur->lock);
-            cur = next;
-        }
-        free(old_bucket[i]->head);
-//        pthread_mutex_unlock(&array[i]);
-//        pthread_mutex_destroy(&array[i]);
-//        pthread_mutex_unlock(&old_bucket[i]->list_lock);
-//        pthread_mutex_destroy(&old_bucket[i]->list_lock);
-//        free(old_bucket[i]);
+    //        pthread_mutex_destroy(&old_bucket[i]->list_lock);
+    //        pthread_mutex_destroy(&array[i]);
+        if (old_bucket[i] != NULL)
+            free(old_bucket[i]->head);
+        free(old_bucket[i]);
     }
-//    free(old_bucket);
+    free(old_bucket);
     lock_rehash = 0;
 }
 
