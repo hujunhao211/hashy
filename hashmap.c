@@ -103,10 +103,10 @@ struct hash_map* hash_map_new(size_t (*hash)(void*), int (*cmp)(void*,void*),
         return NULL;
     }
     hashmap_t *hashmap = malloc(sizeof(struct hash_map));
-    hashmap->buckets = malloc(sizeof(linked_list_t*) * 500);
-    array = malloc(sizeof(pthread_mutex_t) * 500);
+    hashmap->buckets = malloc(sizeof(linked_list_t*) * 1000);
+    array = malloc(sizeof(pthread_mutex_t) * 1000);
     hashmap->size = 0;
-    hashmap->capacity = 500;
+    hashmap->capacity = 1000;
     for (int i = 0; i < hashmap->capacity; i++) {
         hashmap->buckets[i] = NULL;
     }
@@ -175,11 +175,6 @@ void rehash(hashmap_t* map){
             cur = next;
         }
         free(old_bucket[i]->head);
-//        pthread_mutex_unlock(&array[i]);
-//        pthread_mutex_destroy(&array[i]);
-//        pthread_mutex_unlock(&old_bucket[i]->list_lock);
-//        pthread_mutex_destroy(&old_bucket[i]->list_lock);
-//        free(old_bucket[i]);
     }
     free(old_bucket);
     for (int i = 0; i < map->capacity; i++){
