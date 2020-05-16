@@ -12,7 +12,7 @@ linked_list_t* list_initialize(void){
     pthread_mutex_init(&list->list_lock, NULL);
     return list;
 }
-int lock_rehash = 0;
+static int lock_rehash = 0;
 package_t* find(hashmap_t* map,node_t* node,void* key){
     node_t *cur, *prev;
     package_t* package = malloc(sizeof(package_t));
